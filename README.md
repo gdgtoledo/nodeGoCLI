@@ -1,8 +1,8 @@
 ![i'm doing my best](./images/iamdoingmybest.gif)
 
-#I'm doing my best CLI
+# I'm doing my best CLI
 
-##Simple and functional Node or Go To Do List
+## Simple and functional Node or Go To Do List
 
 
 
