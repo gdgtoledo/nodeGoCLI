@@ -24,6 +24,7 @@ const flags = {
     default: true,
     alias: 'c',
     desc: 'Set complete task state',
+    type: 'boolean',
   },
   description: {
     demand: true,

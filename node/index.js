@@ -1,7 +1,7 @@
 const args = require('./args');
 const config = require('./config');
-const tasks = require('./tasks/index');
-const task = require('./task/index');
+const tasks = require('./tasks');
+const task = require('./task');
 
 const argv = args.get();
 const command = argv._[0];
@@ -17,10 +17,10 @@ const inputs =  {
   flags,
 };
 
-const start = async (inputs) => {
+const start = async (inputs, config) => {
   switch (inputs.command) {
     case config.cli.commands.create.name:
-      await task.create(inputs.flags.description);
+      await task.create(inputs.flags.description, inputs.flags.complete);
       break;
 
     case config.cli.commands.list.name:
@@ -28,7 +28,7 @@ const start = async (inputs) => {
       break;
 
     case config.cli.commands.update.name:
-      // commands.create(options.base, options.limit);
+      await task.update(inputs.flags.description, inputs.flags.complete);
       break;
 
     default:

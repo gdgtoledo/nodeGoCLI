@@ -1,36 +1,25 @@
 const colors = require('colors');
-const fs = require('fs');
 
-const config = require('../config');
-const tasks = require('../tasks/get');
+const tasks = require('../tasks');
 const { Task } = require('./Task.js');
 
-const FLAG_ERROR = 'Error: task is not a string';
-
-const create = async (description) => {
+const create = async (description, isComplete) => {
   const SUCCESS = `A task: "${description}" has being added`;
+  const FLAG_ERROR = 'Error: task is not a string';
   const taskDescriptionIsAString = typeof description === 'string';
 
-  if (!taskDescriptionIsAString){
+  if (!taskDescriptionIsAString) {
     throw new Error(FLAG_ERROR.red);
     return;
   }
 
   const tasksToDo = await tasks.get();
-  const newTaskToDo = new Task(description, false);
+  const newTaskToDo = new Task(description, isComplete);
 
   tasksToDo.push(newTaskToDo);
+  await tasks.post(tasksToDo);
 
-  const tasksToDoFilePathToStoreThem = `./tasks/${config.files.tasks}`;
-  const tasksToDoStringed= JSON.stringify(tasksToDo);
-
-  fs.writeFile(tasksToDoFilePathToStoreThem, tasksToDoStringed, (err) => {
-    if (err) {
-      throw new Error(err.red);
-    } else {
-      console.log(SUCCESS.blue);
-    }
-  });
+  console.log(SUCCESS.blue);
 };
 
 exports.create = create;
