@@ -10,9 +10,6 @@ import (
 
 const defaultDescription = "Darle a Jhon Snow el trono de hierro"
 
-var completed bool
-var description string
-
 func init() {
 	createCmd.Flags().BoolVarP(
 		&completed, "completed", "c", false, "Marks a task as completed (default false)")

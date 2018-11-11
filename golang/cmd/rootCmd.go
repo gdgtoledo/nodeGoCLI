@@ -7,6 +7,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var completed bool
+var description string
+
 var rootCmd = &cobra.Command{
 	Use:   "gdg-cli",
 	Short: "gdg-cli (Google Developer Group CLI) It's a simple and functional Golang To-Do List.",
