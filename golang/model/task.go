@@ -29,12 +29,23 @@ func Create(description string, complete bool) (TaskModel, error) {
 	return task.store.create(task)
 }
 
+// Update updates a task
+func Update(description string, complete bool) (TaskModel, error) {
+	task := TaskModel{
+		Complete:    complete,
+		Description: description,
+		store:       taskStoreImpl{},
+	}
+
+	return task.store.update(task)
+}
+
 // taskStore interface for the task store
 type taskStore interface {
 	create(task TaskModel) (TaskModel, error)
 	//get(description string) (TaskModel, error)
 	//list() ([]TaskModel, error)
-	//update(t Task) (TaskModel, error)
+	update(task TaskModel) (TaskModel, error)
 }
 
 type taskStoreImpl struct {
@@ -43,5 +54,11 @@ type taskStoreImpl struct {
 // create creates a task
 func (t taskStoreImpl) create(task TaskModel) (TaskModel, error) {
 	log.Println(`A task: ` + task.Description + ` has being added`)
+	return task, nil
+}
+
+// update updated a task
+func (t taskStoreImpl) update(task TaskModel) (TaskModel, error) {
+	log.Println(`A task: ` + task.Description + ` has being updated`)
 	return task, nil
 }
