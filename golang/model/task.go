@@ -17,7 +17,6 @@ type Task interface {
 type TaskModel struct {
 	Complete    bool
 	Description string
-	store       taskStore
 }
 
 // Create creates a task
@@ -25,10 +24,11 @@ func Create(description string, complete bool) (TaskModel, error) {
 	task := TaskModel{
 		Complete:    complete,
 		Description: description,
-		store:       taskStoreImpl{},
 	}
 
-	return task.store.create(task)
+	store := taskStoreImpl{}
+
+	return store.create(task)
 }
 
 // List lists all tasks in the data store
@@ -43,10 +43,11 @@ func Update(description string, complete bool) (TaskModel, error) {
 	task := TaskModel{
 		Complete:    complete,
 		Description: description,
-		store:       taskStoreImpl{},
 	}
 
-	return task.store.update(task)
+	store := taskStoreImpl{}
+
+	return store.update(task)
 }
 
 // taskStore interface for the task store
