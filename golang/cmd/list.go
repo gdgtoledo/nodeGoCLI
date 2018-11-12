@@ -23,7 +23,7 @@ var listCmd = &cobra.Command{
 		}
 
 		for _, t := range tasks {
-			log.Println(t)
+			log.Println(t.GetDescription())
 		}
 	},
 }
