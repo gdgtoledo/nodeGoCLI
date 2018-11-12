@@ -13,6 +13,7 @@ import (
 type Task interface {
 	GetDescription() string
 	IsComplete() bool
+	ToString() string
 }
 
 // TaskModel implementation for a Task
@@ -29,6 +30,18 @@ func (t TaskModel) GetDescription() string {
 // IsComplete returns the description of the task
 func (t TaskModel) IsComplete() bool {
 	return t.Complete
+}
+
+// ToString returns the string representation  of the task
+func (t TaskModel) ToString() string {
+	var completedMessage = "☑"
+
+	completed := t.IsComplete()
+	if !completed {
+		completedMessage = "□"
+	}
+
+	return completedMessage + " " + t.GetDescription()
 }
 
 // Create creates a task
