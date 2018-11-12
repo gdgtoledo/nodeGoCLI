@@ -8,7 +8,6 @@ var tasks []TaskModel
 
 // Task interface representing task actions
 type Task interface {
-	Create(description string, complete bool) (TaskModel, error)
 	GetDescription() string
 	IsComplete() bool
 }
