@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+
+	config "github.com/gdgtoledo/nodeGoCLI/golang/config"
 )
 
 // Task interface representing task actions
@@ -84,6 +86,8 @@ func (t taskStoreImpl) create(task TaskModel) (TaskModel, error) {
 
 	tasks.Items = append(tasks.Items, task)
 
+	saveTasksToFile(tasks)
+
 	return task, nil
 }
 
@@ -99,37 +103,21 @@ func (t taskStoreImpl) update(task TaskModel) (TaskModel, error) {
 	return task, nil
 }
 
-func checkGDGCLIHome(path string) {
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		os.Mkdir(path, os.ModePerm)
-	}
-}
+func getTasksFile() (*os.File, error) {
+	var tasksFilePath = config.TasksFileName()
 
-func checkTasksFile(path string) {
-	_, err := os.Stat(path)
-	if err != nil {
-		log.Println("File does not exist. Creating it now")
-		tasksFile, _ := os.OpenFile(path, os.O_RDONLY|os.O_CREATE, 0666)
-
-		defer tasksFile.Close()
-	}
+	return os.Open(tasksFilePath)
 }
 
 func readTasksFromFile() (Tasks, error) {
 	var tasks Tasks
 
-	var cliHome = os.Getenv("HOME") + string(os.PathSeparator) + ".gdg-cli"
-	checkGDGCLIHome(cliHome)
-
-	var tasksFilePath = cliHome + string(os.PathSeparator) + "tasks.json"
-	checkTasksFile(tasksFilePath)
-
-	tasksFile, err := os.Open(tasksFilePath)
+	tasksFile, err := getTasksFile()
 	if err != nil {
 		return tasks, err
 	}
 
-	log.Println("Successfully Opened tasks.json")
+	log.Println("Successfully Opened " + tasksFile.Name())
 
 	defer tasksFile.Close()
 
@@ -138,4 +126,16 @@ func readTasksFromFile() (Tasks, error) {
 	json.Unmarshal([]byte(byteValue), &tasks.Items)
 
 	return tasks, nil
+}
+
+func saveTasksToFile(tasks Tasks) error {
+	tasksJSON, _ := json.Marshal(tasks)
+
+	err := ioutil.WriteFile(config.TasksFileName(), tasksJSON, 0644)
+	if err != nil {
+		return err
+	}
+
+	log.Println("Tasks saved successfully")
+	return nil
 }
