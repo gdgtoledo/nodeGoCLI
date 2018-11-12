@@ -31,11 +31,6 @@ func (t TaskModel) IsComplete() bool {
 	return t.Complete
 }
 
-// Tasks struct which contains an array of tasks
-type Tasks struct {
-	Items []TaskModel `json:"tasks"`
-}
-
 // Create creates a task
 func Create(description string, complete bool) (TaskModel, error) {
 	task := TaskModel{
@@ -84,7 +79,7 @@ func (t taskStoreImpl) create(task TaskModel) (TaskModel, error) {
 
 	tasks, _ := readTasksFromFile()
 
-	tasks.Items = append(tasks.Items, task)
+	tasks = append(tasks, task)
 
 	saveTasksToFile(tasks)
 
@@ -94,7 +89,7 @@ func (t taskStoreImpl) create(task TaskModel) (TaskModel, error) {
 func (t taskStoreImpl) list() ([]TaskModel, error) {
 	tasks, _ := readTasksFromFile()
 
-	return tasks.Items, nil
+	return tasks, nil
 }
 
 // update updated a task
@@ -109,8 +104,8 @@ func getTasksFile() (*os.File, error) {
 	return os.Open(tasksFilePath)
 }
 
-func readTasksFromFile() (Tasks, error) {
-	var tasks Tasks
+func readTasksFromFile() ([]TaskModel, error) {
+	var tasks []TaskModel
 
 	tasksFile, err := getTasksFile()
 	if err != nil {
@@ -123,12 +118,12 @@ func readTasksFromFile() (Tasks, error) {
 
 	byteValue, _ := ioutil.ReadAll(tasksFile)
 
-	json.Unmarshal([]byte(byteValue), &tasks.Items)
+	json.Unmarshal([]byte(byteValue), &tasks)
 
 	return tasks, nil
 }
 
-func saveTasksToFile(tasks Tasks) error {
+func saveTasksToFile(tasks []TaskModel) error {
 	tasksJSON, _ := json.Marshal(tasks)
 
 	err := ioutil.WriteFile(config.TasksFileName(), tasksJSON, 0644)
