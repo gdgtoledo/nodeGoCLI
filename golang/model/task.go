@@ -94,6 +94,19 @@ func (t taskStoreImpl) list() ([]TaskModel, error) {
 
 // update updated a task
 func (t taskStoreImpl) update(task TaskModel) (TaskModel, error) {
+	tasks, _ := readTasksFromFile()
+
+	for i, t := range tasks {
+		if t.GetDescription() == task.GetDescription() {
+			t.Complete = task.IsComplete()
+
+			tasks[i] = t
+			break
+		}
+	}
+
+	saveTasksToFile(tasks)
+
 	log.Println(`A task: ` + task.Description + ` has being updated`)
 	return task, nil
 }
@@ -125,6 +138,10 @@ func readTasksFromFile() ([]TaskModel, error) {
 
 func saveTasksToFile(tasks []TaskModel) error {
 	tasksJSON, _ := json.Marshal(tasks)
+
+	for _, t := range tasks {
+		log.Println(t)
+	}
 
 	err := ioutil.WriteFile(config.TasksFileName(), tasksJSON, 0644)
 	if err != nil {
