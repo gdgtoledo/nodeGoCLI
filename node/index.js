@@ -1,3 +1,4 @@
+const colors = require('colors');
 const args = require('./args');
 const config = require('./config');
 const tasks = require('./tasks');
@@ -12,7 +13,7 @@ const flags = {
   task: argv.task,
 };
 
-const inputs =  {
+const inputs = {
   command,
   flags,
 };
@@ -31,8 +32,12 @@ const start = async (inputs, config) => {
       await task.update(inputs.flags.description, inputs.flags.complete);
       break;
 
+    case config.cli.commands.delete.name:
+      await task.remove(inputs.flags.description);
+      break;
+
     default:
-      console.log('Command is not in command list, try to execute node index --help');
+      console.log('Command is not in command list, try to execute node index --help').red;
       break;
   }
 };

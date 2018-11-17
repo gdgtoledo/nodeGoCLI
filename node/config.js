@@ -1,25 +1,23 @@
 const commands = {
   create: {
-    name:  'create',
-    description:'Create a todo task',
+    name: 'create',
+    description: 'Create a todo task',
   },
-  list : {
+  list: {
     name: 'list',
     description: 'Print in console all todo tasks',
   },
-  update : {
+  update: {
     name: 'update',
     description: 'Update the complete state for a task',
-  }
+  },
+  delete: {
+    name: 'remove',
+    description: 'Remove a task',
+  },
 };
 
 const flags = {
-  task: {
-    alias: 't',
-    default: 'all',
-    desc: 'List a task',
-    type: 'string',
-  },
   complete: {
     default: true,
     alias: 'c',

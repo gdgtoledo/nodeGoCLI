@@ -2,7 +2,7 @@ const fs = require('fs');
 const config = require('../config');
 
 const tasksToDoFilePathToStoreThem = `./tasks/${config.files.tasks}`;
-const SUCCESS = `Tasks have being saved`;
+const SUCCESS = `Tasks list have being saved`;
 
 const post = async (tasksToDo) => {
   const tasksToDoStringed = JSON.stringify(tasksToDo);

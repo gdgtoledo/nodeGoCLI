@@ -1,4 +1,3 @@
-const colors = require('colors');
 const config = require('../config');
 
 const get = async () => {
@@ -10,4 +9,6 @@ const get = async () => {
   }
 };
 
-exports.get = get;
+module.exports = {
+  get: get,
+};

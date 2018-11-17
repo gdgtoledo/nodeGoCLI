@@ -6,7 +6,7 @@
 
 
 
-### Node 
+### Node
 
 
 
@@ -22,13 +22,19 @@ List all your tasks
 
 Create a single task. By default the task is created with false complete state
 
-```node index.js create -d "Example for task description"```
+`node index.js create -d "Example for task description"`
 
 ##### Update task
 
 Update the complete state for a task
 
-` node index.js update -d "Example for task description" -c true `
+`node index.js update -d "Example for task description" -c true`
+
+##### Remove task
+
+Remove a single task
+
+`node index.js remove -d "Example for task description"`
 
 
 
@@ -42,9 +48,9 @@ String  description for a task
 
 ##### Complete
 
-Boolean state (complete/not complete) for a task 
+Boolean state (complete/not complete) for a task
 
-`--complete -c <Boolean>`  
+`--complete -c <Boolean>`
 
 
 
