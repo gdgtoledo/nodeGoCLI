@@ -1,4 +1,4 @@
 node_modules/
-tasks/tasks.json
+node/tasks/tasks.json
 launch.json
 settings.json
