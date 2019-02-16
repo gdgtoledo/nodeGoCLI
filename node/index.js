@@ -20,22 +20,22 @@ const inputs = {
   flags,
 };
 
-const start = async (inputs, config) => {
-  switch (inputs.command) {
-    case config.cli.commands.create.name:
-      await task.create(inputs.flags.description, inputs.flags.complete);
+const start = async (userInputs, configuration) => {
+  switch (userInputs.command) {
+    case configuration.cli.commands.create.name:
+      await task.create(userInputs.flags.description, userInputs.flags.complete);
       break;
 
-    case config.cli.commands.list.name:
+    case configuration.cli.commands.list.name:
       await tasks.list();
       break;
 
-    case config.cli.commands.update.name:
-      await task.update(inputs.flags.description, inputs.flags.complete);
+    case configuration.cli.commands.update.name:
+      await task.update(userInputs.flags.description, userInputs.flags.complete);
       break;
 
-    case config.cli.commands.delete.name:
-      await task.remove(inputs.flags.description);
+    case configuration.cli.commands.delete.name:
+      await task.remove(userInputs.flags.description);
       break;
 
     default:
