@@ -1,8 +1,11 @@
 {
-  "name": "filesystemwritefileyargvs",
-  "version": "0.1.0",
-  "description": "CLI app to create a file with multiply table with a base",
+  "name": "do",
+  "version": "0.1.1",
+  "description": "I do my best, CLI app to create a file with multiply table with a base",
   "main": "index.js",
+  "bin": {
+    "do": "./index.js"
+  },
   "scripts": {
     "format": "./node_modules/prettier/bin-prettier.js --config .prettierrc --write ./**/*.js"
   },
