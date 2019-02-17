@@ -1,9 +1,9 @@
 const { list } = require('./list');
 const { get } = require('./get');
-const { post } = require('./post');
+const { save } = require('./save');
 
 module.exports = {
   get,
   list,
-  post,
+  save,
 };

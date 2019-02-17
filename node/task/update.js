@@ -1,31 +1,33 @@
-const colors = require('colors');
 const tasks = require('../tasks');
 const { getIndex } = require('./get');
 const icon = require('./icon');
+const { success } = require('../logs/success');
 
 const updateTasksToDo = (task = { index: -1, isComplete: false }, tasks) => {
   const NO_TASK_ERROR = 'Error: the task that you are trying to update doesnt exist in database';
 
   if (task.index < 0) {
-    throw new Error(NO_TASK_ERROR.red);
+    error(NO_TASK_ERROR);
+    process.exit(1);
   }
 
   tasks[task.index].isComplete = task.isComplete;
   return tasks;
 };
 
-const consoleSuccessMessage = (description, taskIcon) => {
-  const SUCCESS = `A task: "${description}" has being updated to state ${taskIcon}`;
-  console.log(SUCCESS.green);
-};
-
 const update = async (description, isComplete) => {
   let tasksToDo = await tasks.get();
   const taskIndexToUpdate = getIndex(description, tasksToDo);
+
+  process.stdout.write('\n');
+
   tasksToDo = updateTasksToDo({ index: taskIndexToUpdate, isComplete }, [...tasksToDo]);
-  await tasks.post(tasksToDo);
+  await tasks.save(tasksToDo);
+
   const taskIcon = icon.get(tasksToDo[taskIndexToUpdate].isComplete);
-  consoleSuccessMessage(description, taskIcon);
+  const UPDATE_SUCCESS = `"${description}" has being updated to state ${taskIcon}`;
+
+  success(UPDATE_SUCCESS);
 };
 
 exports.update = update;
