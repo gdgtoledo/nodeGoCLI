@@ -52,6 +52,26 @@ Boolean state (complete/not complete) for a task
 
 `--complete -c <Boolean>`
 
+#### Logs messages
+
+You can use the global logs to our CLI
+
+```javascript
+
+const { error } = require('./logs/error');
+const { warning } = require('./logs/warning');
+const { info } = require('./logs/info');
+const { success } = require('./logs/success');
+
+
+success('I`m doing my best!');
+warning('I`m doing my best!');
+info('I`m doing my best!');
+error('I`m doing my best!');
+```
+
+![logs](./images/logs.png)
+
 
 
 
