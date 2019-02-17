@@ -1,5 +1,3 @@
-const colors = require('colors');
-
 const tasks = require('../tasks');
 const { Task } = require('./Task');
 const { success } = require('../logs/success');

@@ -1,4 +1,3 @@
-const colors = require('colors');
 const { error } = require('../logs/error');
 const tasks = require('../tasks/get');
 const icon = require('../task/icon');
