@@ -5,8 +5,9 @@ const { success } = require('../logs/success');
 
 const updateTasksToDo = (task = { index: -1, isComplete: false }, tasks) => {
   const NO_TASK_ERROR = 'Error: the task that you are trying to update doesnt exist in database';
+  const hasTaskToUpdate = task.index > 0;
 
-  if (task.index < 0) {
+  if (!hasTaskToUpdate) {
     error(NO_TASK_ERROR);
     process.exit(1);
   }
