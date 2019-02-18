@@ -8,11 +8,11 @@ const remove = async (description) => {
   const NO_TASKS_ERROR = 'Error: the task that you are trying to remove doesnt exist in database';
   const tasksToDo = await tasks.get();
   const taskIndexToRemove = getIndex(description, tasksToDo);
-  const exitTaskToRemove = taskIndexToRemove > -1;
+  const hasTaskToRemove = taskIndexToRemove > -1;
 
   process.stdout.write('\n');
 
-  if (!exitTaskToRemove) {
+  if (!hasTaskToRemove) {
     error(NO_TASKS_ERROR);
     process.stdout.write('\n');
     process.exit(1);
