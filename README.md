@@ -8,6 +8,7 @@
 
 ### Node
 
+![i'm doing my best](./images/nodeLogo.png)
 
 
 #### Commands
