@@ -3,6 +3,7 @@ const args = require('./args');
 const config = require('./config');
 const tasks = require('./tasks');
 const task = require('./task');
+const { error } = require('./logs/error');
 
 const argv = args.get();
 const command = argv._[0];
@@ -37,7 +38,9 @@ const start = async (userInputs, configuration) => {
       break;
 
     default:
-      console.log('Command is not in command list, try to execute node index --help').red;
+      process.stdout.write('\n');
+      error('Command is not in command list, try to execute node index --help');
+      process.stdout.write('\n');
       break;
   }
 };
