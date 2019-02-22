@@ -24,9 +24,9 @@ var updateCmd = &cobra.Command{
 	Short: "Update single task",
 	Long:  `Update the complete state for a task`,
 	Run: func(cmd *cobra.Command, args []string) {
-		_, err := task.Update(description, completed)
+		err := task.Update(description, completed)
 		if err != nil {
-			fmt.Println(color.RedString("Error updating the task"))
+			fmt.Println(color.RedString(err.Error()))
 			os.Exit(1)
 		}
 	},

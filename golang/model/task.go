@@ -88,7 +88,7 @@ func Remove(description string) error {
 }
 
 // Update updates a task
-func Update(description string, complete bool) (TaskModel, error) {
+func Update(description string, complete bool) error {
 	task := TaskModel{
 		Complete:    complete,
 		Description: description,
@@ -105,7 +105,7 @@ type taskStore interface {
 	//get(description string) (TaskModel, error)
 	list() ([]TaskModel, error)
 	remove(task TaskModel) error
-	update(task TaskModel) (TaskModel, error)
+	update(task TaskModel) error
 }
 
 type taskStoreImpl struct {
@@ -159,22 +159,31 @@ func (t taskStoreImpl) remove(task TaskModel) error {
 }
 
 // update updated a task
-func (t taskStoreImpl) update(task TaskModel) (TaskModel, error) {
+func (t taskStoreImpl) update(task TaskModel) error {
 	tasks, _ := readTasksFromFile()
+
+	found := false
 
 	for i, t := range tasks {
 		if t.GetDescription() == task.GetDescription() {
 			t.Complete = task.IsComplete()
 
 			tasks[i] = t
+
+			found = true
+
 			break
 		}
 	}
 
+	if !found {
+		return errors.New(`The task: ` + task.Description + ` could not be updated: Not Found`)
+	}
+
 	saveTasksToFile(tasks)
 
-	log.Println(color.GreenString(`A task: ` + task.Description + ` has being updated`))
-	return task, nil
+	log.Println(color.GreenString(`The task: ` + task.Description + ` has being updated`))
+	return nil
 }
 
 func getTasksFile() (*os.File, error) {
