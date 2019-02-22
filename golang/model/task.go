@@ -153,10 +153,6 @@ func readTasksFromFile() ([]TaskModel, error) {
 func saveTasksToFile(tasks []TaskModel) error {
 	tasksJSON, _ := json.Marshal(tasks)
 
-	for _, t := range tasks {
-		log.Println(color.YellowString(t.ToString()))
-	}
-
 	err := ioutil.WriteFile(config.TasksFileName(), tasksJSON, 0644)
 	if err != nil {
 		return err
