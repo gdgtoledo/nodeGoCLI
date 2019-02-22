@@ -35,11 +35,11 @@ func (t TaskModel) IsComplete() bool {
 
 // ToString returns the string representation  of the task
 func (t TaskModel) ToString() string {
-	var completedMessage = "☑"
+	var completedMessage = "✅"
 
 	completed := t.IsComplete()
 	if !completed {
-		completedMessage = "□"
+		completedMessage = "🕗"
 	}
 
 	return completedMessage + " " + t.GetDescription()
