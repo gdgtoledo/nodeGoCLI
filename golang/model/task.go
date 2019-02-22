@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -133,18 +134,27 @@ func (t taskStoreImpl) list() ([]TaskModel, error) {
 func (t taskStoreImpl) remove(task TaskModel) error {
 	tasks, _ := readTasksFromFile()
 
+	removed := false
+
 	for i, t := range tasks {
 		if t.GetDescription() == task.GetDescription() {
 			t.Complete = task.IsComplete()
 
 			tasks = append(tasks[:i], tasks[i+1:]...)
+
+			removed = true
+
 			break
 		}
 	}
 
+	if !removed {
+		return errors.New(`The task: ` + task.Description + ` could not be deleted: Not found`)
+	}
+
 	saveTasksToFile(tasks)
 
-	log.Println(color.GreenString(`A task: ` + task.Description + ` has being removed`))
+	log.Println(color.GreenString(`The task: ` + task.Description + ` has being removed`))
 	return nil
 }
 

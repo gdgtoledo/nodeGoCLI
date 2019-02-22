@@ -24,7 +24,7 @@ var removeCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		err := task.Remove(description)
 		if err != nil {
-			fmt.Println(color.RedString("Error removing task"))
+			fmt.Println(color.RedString(err.Error()))
 			os.Exit(1)
 		}
 
