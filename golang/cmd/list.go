@@ -5,6 +5,7 @@ import (
 
 	task "github.com/gdgtoledo/nodeGoCLI/golang/model"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -19,11 +20,11 @@ var listCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		tasks, err := task.List()
 		if err != nil {
-			log.Fatalln("Error listing tasks")
+			log.Fatalln(color.RedString("Error listing tasks"))
 		}
 
 		for _, t := range tasks {
-			log.Println(t.ToString())
+			log.Println(color.YellowString(t.ToString()))
 		}
 	},
 }

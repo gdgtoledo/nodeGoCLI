@@ -5,6 +5,7 @@ import (
 
 	task "github.com/gdgtoledo/nodeGoCLI/golang/model"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -26,7 +27,7 @@ var createCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		_, err := task.Create(description, completed)
 		if err != nil {
-			log.Fatalf("Error creating the task")
+			log.Fatalln(color.RedString("Error creating the task"))
 		}
 	},
 }

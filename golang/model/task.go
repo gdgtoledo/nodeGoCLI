@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/fatih/color"
 	config "github.com/gdgtoledo/nodeGoCLI/golang/config"
 )
 
@@ -88,7 +89,7 @@ type taskStoreImpl struct {
 
 // create creates a task
 func (t taskStoreImpl) create(task TaskModel) (TaskModel, error) {
-	log.Println(`A task: ` + task.Description + ` has being added`)
+	log.Println(color.GreenString(`A task: ` + task.Description + ` has being added`))
 
 	tasks, _ := readTasksFromFile()
 
@@ -120,7 +121,7 @@ func (t taskStoreImpl) update(task TaskModel) (TaskModel, error) {
 
 	saveTasksToFile(tasks)
 
-	log.Println(`A task: ` + task.Description + ` has being updated`)
+	log.Println(color.GreenString(`A task: ` + task.Description + ` has being updated`))
 	return task, nil
 }
 
@@ -138,7 +139,7 @@ func readTasksFromFile() ([]TaskModel, error) {
 		return tasks, err
 	}
 
-	log.Println("Successfully Opened " + tasksFile.Name())
+	log.Println(color.GreenString("Successfully Opened " + tasksFile.Name()))
 
 	defer tasksFile.Close()
 
@@ -153,7 +154,7 @@ func saveTasksToFile(tasks []TaskModel) error {
 	tasksJSON, _ := json.Marshal(tasks)
 
 	for _, t := range tasks {
-		log.Println(t)
+		log.Println(color.YellowString(t.ToString()))
 	}
 
 	err := ioutil.WriteFile(config.TasksFileName(), tasksJSON, 0644)
@@ -161,6 +162,6 @@ func saveTasksToFile(tasks []TaskModel) error {
 		return err
 	}
 
-	log.Println("Tasks saved successfully")
+	log.Println(color.GreenString("Tasks saved successfully"))
 	return nil
 }
