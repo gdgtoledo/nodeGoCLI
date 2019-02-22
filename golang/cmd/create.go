@@ -26,9 +26,9 @@ var createCmd = &cobra.Command{
 	Short: "Create a single task",
 	Long:  `Create a single task. By default the task is created with false complete state`,
 	Run: func(cmd *cobra.Command, args []string) {
-		_, err := task.Create(description, completed)
+		err := task.Create(description, completed)
 		if err != nil {
-			fmt.Println(color.RedString("Error creating the task"))
+			fmt.Println(color.RedString(err.Error()))
 			os.Exit(1)
 		}
 

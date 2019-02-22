@@ -48,7 +48,7 @@ func (t TaskModel) ToString() string {
 }
 
 // Create creates a task
-func Create(description string, complete bool) (TaskModel, error) {
+func Create(description string, complete bool) error {
 	task := TaskModel{
 		Complete:    complete,
 		Description: description,
@@ -101,7 +101,7 @@ func Update(description string, complete bool) error {
 
 // taskStore interface for the task store
 type taskStore interface {
-	create(task TaskModel) (TaskModel, error)
+	create(task TaskModel) error
 	//get(description string) (TaskModel, error)
 	list() ([]TaskModel, error)
 	remove(task TaskModel) error
@@ -112,16 +112,23 @@ type taskStoreImpl struct {
 }
 
 // create creates a task
-func (t taskStoreImpl) create(task TaskModel) (TaskModel, error) {
-	log.Println(color.GreenString(`A task: ` + task.Description + ` has being added`))
-
+func (t taskStoreImpl) create(task TaskModel) error {
 	tasks, _ := readTasksFromFile()
+
+	for _, t := range tasks {
+		if t.GetDescription() == task.GetDescription() {
+			return errors.New(
+				`The task: ` + task.Description + ` could not be created: Already exists`)
+		}
+	}
 
 	tasks = append(tasks, task)
 
 	saveTasksToFile(tasks)
 
-	return task, nil
+	log.Println(color.GreenString(`The task: ` + task.Description + ` has being added`))
+
+	return nil
 }
 
 func (t taskStoreImpl) list() ([]TaskModel, error) {
