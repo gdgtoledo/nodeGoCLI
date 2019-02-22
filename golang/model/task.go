@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -58,10 +59,20 @@ func Create(description string, complete bool) (TaskModel, error) {
 }
 
 // List lists all tasks in the data store
-func List() ([]TaskModel, error) {
+func List() error {
 	store := taskStoreImpl{}
 
-	return store.list()
+	tasks, err := store.list()
+	if err != nil {
+		log.Println(color.RedString("Error listing tasks"))
+		return err
+	}
+
+	for _, t := range tasks {
+		fmt.Println(color.YellowString(t.ToString()))
+	}
+
+	return nil
 }
 
 // Remove removes a task

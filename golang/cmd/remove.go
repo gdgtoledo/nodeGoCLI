@@ -28,9 +28,9 @@ var removeCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		tasks, _ := task.List()
-		for _, t := range tasks {
-			fmt.Println(color.YellowString(t.ToString()))
+		err = task.List()
+		if err != nil {
+			os.Exit(1)
 		}
 	},
 }
