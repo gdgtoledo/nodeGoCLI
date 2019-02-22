@@ -219,6 +219,5 @@ func saveTasksToFile(tasks []TaskModel) error {
 		return err
 	}
 
-	log.Println(color.GreenString("Tasks saved successfully"))
 	return nil
 }
