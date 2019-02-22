@@ -1,10 +1,12 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
+	"os"
 
 	task "github.com/gdgtoledo/nodeGoCLI/golang/model"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -24,9 +26,15 @@ var createCmd = &cobra.Command{
 	Short: "Create a single task",
 	Long:  `Create a single task. By default the task is created with false complete state`,
 	Run: func(cmd *cobra.Command, args []string) {
-		_, err := task.Create(description, completed)
+		err := task.Create(description, completed)
 		if err != nil {
-			log.Fatalf("Error creating the task")
+			fmt.Println(color.RedString(err.Error()))
+			os.Exit(1)
+		}
+
+		err = task.List()
+		if err != nil {
+			os.Exit(1)
 		}
 	},
 }

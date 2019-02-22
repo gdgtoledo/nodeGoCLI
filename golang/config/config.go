@@ -1,8 +1,10 @@
 package config
 
 import (
-	"log"
+	"fmt"
 	"os"
+
+	"github.com/fatih/color"
 )
 
 const cliHomeName = ".gdg-cli"
@@ -43,7 +45,7 @@ func checkTasksFile() {
 
 	_, err := os.Stat(path)
 	if err != nil {
-		log.Println("File does not exist. Creating it now")
+		fmt.Println(color.MagentaString("File does not exist. Creating it now"))
 		tasksFile, _ := os.OpenFile(path, os.O_RDONLY|os.O_CREATE, 0666)
 
 		defer tasksFile.Close()

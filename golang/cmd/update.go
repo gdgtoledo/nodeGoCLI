@@ -1,10 +1,12 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
+	"os"
 
 	task "github.com/gdgtoledo/nodeGoCLI/golang/model"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -22,9 +24,15 @@ var updateCmd = &cobra.Command{
 	Short: "Update single task",
 	Long:  `Update the complete state for a task`,
 	Run: func(cmd *cobra.Command, args []string) {
-		_, err := task.Update(description, completed)
+		err := task.Update(description, completed)
 		if err != nil {
-			log.Fatalf("Error updating the task")
+			fmt.Println(color.RedString(err.Error()))
+			os.Exit(1)
+		}
+
+		err = task.List()
+		if err != nil {
+			os.Exit(1)
 		}
 	},
 }

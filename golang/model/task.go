@@ -2,10 +2,13 @@ package model
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 
+	"github.com/fatih/color"
 	config "github.com/gdgtoledo/nodeGoCLI/golang/config"
 )
 
@@ -34,18 +37,18 @@ func (t TaskModel) IsComplete() bool {
 
 // ToString returns the string representation  of the task
 func (t TaskModel) ToString() string {
-	var completedMessage = "☑"
+	var completedMessage = "✅"
 
 	completed := t.IsComplete()
 	if !completed {
-		completedMessage = "□"
+		completedMessage = "🕗"
 	}
 
 	return completedMessage + " " + t.GetDescription()
 }
 
 // Create creates a task
-func Create(description string, complete bool) (TaskModel, error) {
+func Create(description string, complete bool) error {
 	task := TaskModel{
 		Complete:    complete,
 		Description: description,
@@ -57,14 +60,35 @@ func Create(description string, complete bool) (TaskModel, error) {
 }
 
 // List lists all tasks in the data store
-func List() ([]TaskModel, error) {
+func List() error {
 	store := taskStoreImpl{}
 
-	return store.list()
+	tasks, err := store.list()
+	if err != nil {
+		log.Println(color.RedString("Error listing tasks"))
+		return err
+	}
+
+	for _, t := range tasks {
+		fmt.Println(color.YellowString(t.ToString()))
+	}
+
+	return nil
+}
+
+// Remove removes a task
+func Remove(description string) error {
+	task := TaskModel{
+		Description: description,
+	}
+
+	store := taskStoreImpl{}
+
+	return store.remove(task)
 }
 
 // Update updates a task
-func Update(description string, complete bool) (TaskModel, error) {
+func Update(description string, complete bool) error {
 	task := TaskModel{
 		Complete:    complete,
 		Description: description,
@@ -77,26 +101,34 @@ func Update(description string, complete bool) (TaskModel, error) {
 
 // taskStore interface for the task store
 type taskStore interface {
-	create(task TaskModel) (TaskModel, error)
+	create(task TaskModel) error
 	//get(description string) (TaskModel, error)
 	list() ([]TaskModel, error)
-	update(task TaskModel) (TaskModel, error)
+	remove(task TaskModel) error
+	update(task TaskModel) error
 }
 
 type taskStoreImpl struct {
 }
 
 // create creates a task
-func (t taskStoreImpl) create(task TaskModel) (TaskModel, error) {
-	log.Println(`A task: ` + task.Description + ` has being added`)
-
+func (t taskStoreImpl) create(task TaskModel) error {
 	tasks, _ := readTasksFromFile()
+
+	for _, t := range tasks {
+		if t.GetDescription() == task.GetDescription() {
+			return errors.New(
+				`The task: ` + task.Description + ` could not be created: Already exists`)
+		}
+	}
 
 	tasks = append(tasks, task)
 
 	saveTasksToFile(tasks)
 
-	return task, nil
+	log.Println(color.GreenString(`The task: ` + task.Description + ` has being added`))
+
+	return nil
 }
 
 func (t taskStoreImpl) list() ([]TaskModel, error) {
@@ -105,23 +137,60 @@ func (t taskStoreImpl) list() ([]TaskModel, error) {
 	return tasks, nil
 }
 
-// update updated a task
-func (t taskStoreImpl) update(task TaskModel) (TaskModel, error) {
+// remove removed a task
+func (t taskStoreImpl) remove(task TaskModel) error {
 	tasks, _ := readTasksFromFile()
+
+	removed := false
+
+	for i, t := range tasks {
+		if t.GetDescription() == task.GetDescription() {
+			t.Complete = task.IsComplete()
+
+			tasks = append(tasks[:i], tasks[i+1:]...)
+
+			removed = true
+
+			break
+		}
+	}
+
+	if !removed {
+		return errors.New(`The task: ` + task.Description + ` could not be deleted: Not found`)
+	}
+
+	saveTasksToFile(tasks)
+
+	log.Println(color.GreenString(`The task: ` + task.Description + ` has being removed`))
+	return nil
+}
+
+// update updated a task
+func (t taskStoreImpl) update(task TaskModel) error {
+	tasks, _ := readTasksFromFile()
+
+	found := false
 
 	for i, t := range tasks {
 		if t.GetDescription() == task.GetDescription() {
 			t.Complete = task.IsComplete()
 
 			tasks[i] = t
+
+			found = true
+
 			break
 		}
 	}
 
+	if !found {
+		return errors.New(`The task: ` + task.Description + ` could not be updated: Not Found`)
+	}
+
 	saveTasksToFile(tasks)
 
-	log.Println(`A task: ` + task.Description + ` has being updated`)
-	return task, nil
+	log.Println(color.GreenString(`The task: ` + task.Description + ` has being updated`))
+	return nil
 }
 
 func getTasksFile() (*os.File, error) {
@@ -138,7 +207,7 @@ func readTasksFromFile() ([]TaskModel, error) {
 		return tasks, err
 	}
 
-	log.Println("Successfully Opened " + tasksFile.Name())
+	log.Println(color.GreenString("Successfully Opened " + tasksFile.Name()))
 
 	defer tasksFile.Close()
 
@@ -152,15 +221,10 @@ func readTasksFromFile() ([]TaskModel, error) {
 func saveTasksToFile(tasks []TaskModel) error {
 	tasksJSON, _ := json.Marshal(tasks)
 
-	for _, t := range tasks {
-		log.Println(t)
-	}
-
 	err := ioutil.WriteFile(config.TasksFileName(), tasksJSON, 0644)
 	if err != nil {
 		return err
 	}
 
-	log.Println("Tasks saved successfully")
 	return nil
 }
