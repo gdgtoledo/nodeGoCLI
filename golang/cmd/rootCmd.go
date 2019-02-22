@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
+	"os"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -23,6 +24,7 @@ var rootCmd = &cobra.Command{
 // Execute execute root command
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		log.Fatalln(color.RedString("", err))
+		fmt.Println(color.RedString("", err))
+		os.Exit(1)
 	}
 }

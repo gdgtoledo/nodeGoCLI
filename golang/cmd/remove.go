@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
+	"os"
 
 	task "github.com/gdgtoledo/nodeGoCLI/golang/model"
 
@@ -23,12 +24,13 @@ var removeCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		err := task.Remove(description)
 		if err != nil {
-			log.Fatalln(color.RedString("Error removing task"))
+			fmt.Println(color.RedString("Error removing task"))
+			os.Exit(1)
 		}
 
 		tasks, _ := task.List()
 		for _, t := range tasks {
-			log.Println(color.YellowString(t.ToString()))
+			fmt.Println(color.YellowString(t.ToString()))
 		}
 	},
 }

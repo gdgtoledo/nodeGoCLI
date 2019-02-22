@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
+	"os"
 
 	task "github.com/gdgtoledo/nodeGoCLI/golang/model"
 
@@ -25,7 +26,8 @@ var updateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		_, err := task.Update(description, completed)
 		if err != nil {
-			log.Fatalln(color.RedString("Error updating the task"))
+			fmt.Println(color.RedString("Error updating the task"))
+			os.Exit(1)
 		}
 	},
 }

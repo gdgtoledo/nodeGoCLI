@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
+	"os"
 
 	task "github.com/gdgtoledo/nodeGoCLI/golang/model"
 
@@ -20,11 +21,12 @@ var listCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		tasks, err := task.List()
 		if err != nil {
-			log.Fatalln(color.RedString("Error listing tasks"))
+			fmt.Println(color.RedString("Error listing tasks"))
+			os.Exit(1)
 		}
 
 		for _, t := range tasks {
-			log.Println(color.YellowString(t.ToString()))
+			fmt.Println(color.YellowString(t.ToString()))
 		}
 	},
 }

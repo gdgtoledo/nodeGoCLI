@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
+	"os"
 
 	task "github.com/gdgtoledo/nodeGoCLI/golang/model"
 
@@ -27,7 +28,8 @@ var createCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		_, err := task.Create(description, completed)
 		if err != nil {
-			log.Fatalln(color.RedString("Error creating the task"))
+			fmt.Println(color.RedString("Error creating the task"))
+			os.Exit(1)
 		}
 	},
 }
