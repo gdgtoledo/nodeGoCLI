@@ -29,5 +29,10 @@ var updateCmd = &cobra.Command{
 			fmt.Println(color.RedString(err.Error()))
 			os.Exit(1)
 		}
+
+		err = task.List()
+		if err != nil {
+			os.Exit(1)
+		}
 	},
 }

@@ -31,5 +31,10 @@ var createCmd = &cobra.Command{
 			fmt.Println(color.RedString("Error creating the task"))
 			os.Exit(1)
 		}
+
+		err = task.List()
+		if err != nil {
+			os.Exit(1)
+		}
 	},
 }
