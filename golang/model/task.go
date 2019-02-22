@@ -64,6 +64,17 @@ func List() ([]TaskModel, error) {
 	return store.list()
 }
 
+// Remove removes a task
+func Remove(description string) error {
+	task := TaskModel{
+		Description: description,
+	}
+
+	store := taskStoreImpl{}
+
+	return store.remove(task)
+}
+
 // Update updates a task
 func Update(description string, complete bool) (TaskModel, error) {
 	task := TaskModel{
@@ -81,6 +92,7 @@ type taskStore interface {
 	create(task TaskModel) (TaskModel, error)
 	//get(description string) (TaskModel, error)
 	list() ([]TaskModel, error)
+	remove(task TaskModel) error
 	update(task TaskModel) (TaskModel, error)
 }
 
@@ -104,6 +116,25 @@ func (t taskStoreImpl) list() ([]TaskModel, error) {
 	tasks, _ := readTasksFromFile()
 
 	return tasks, nil
+}
+
+// remove removed a task
+func (t taskStoreImpl) remove(task TaskModel) error {
+	tasks, _ := readTasksFromFile()
+
+	for i, t := range tasks {
+		if t.GetDescription() == task.GetDescription() {
+			t.Complete = task.IsComplete()
+
+			tasks = append(tasks[:i], tasks[i+1:]...)
+			break
+		}
+	}
+
+	saveTasksToFile(tasks)
+
+	log.Println(color.GreenString(`A task: ` + task.Description + ` has being removed`))
+	return nil
 }
 
 // update updated a task
