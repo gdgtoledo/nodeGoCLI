@@ -1,10 +1,10 @@
 {
-  "name": "do",
-  "version": "0.1.1",
+  "name": "ido",
+  "version": "0.1.2",
   "description": "I do my best, CLI app to create a file with multiply table with a base",
   "main": "index.js",
   "bin": {
-    "do": "./index.js"
+    "ido": "./index.js"
   },
   "scripts": {
     "format": "./node_modules/prettier/bin-prettier.js --config .prettierrc --write ./**/*.js"
