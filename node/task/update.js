@@ -2,6 +2,7 @@ const tasks = require('../tasks');
 const { getIndex } = require('./get');
 const icon = require('./icon');
 const { success } = require('../logs/success');
+const { error } = require('../logs/error');
 
 const updateTasksToDo = (task = { index: -1, isComplete: false }, tasks) => {
   const NO_TASK_ERROR = 'Error: the task that you are trying to update doesnt exist in database';
